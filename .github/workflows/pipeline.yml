@@ -1,0 +1,71 @@
+name: Deployment pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize]
+
+jobs:
+  simple_deployment_pipeline:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install dependencies
+        run: npm install
+      - name: Check style
+        run: npm run lint
+      - name: Test the project
+        run: npm test
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: run Playwright tests
+        run: npm run test:e2e
+
+  #     - uses: superfly/flyctl-actions/setup-flyctl@master
+  #     - name: deploy to fly.io
+  #       if: ${{ github.event_name == 'push' }} && github.ref == 'refs/heads/main'  && !contains(github.event.head_commit.message, '#skip')
+  #       run: flyctl deploy --remote-only
+  #       env:
+  #         FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+  # tag_release:
+  #   needs: [simple_deployment_pipeline]
+  #   runs-on: ubuntu-20.04
+  #   if: ${{ github.event_name == 'push' }} && github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '#skip')
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+  #     - name: Bump version and push tag
+  #       uses: anothrNick/github-tag-action@1.71.0
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         DEFAULT_BUMP: patch
+
+  #     - name: Notify Discord on Success
+  #       if: success()       
+  #       uses: Ilshidur/action-discord@master
+  #       with:
+  #         args: |
+  #           release successful!
+  #           Link: ${{ secrets.APP_URL }}
+  #           Author: ${{ github.actor }}
+  #       env:
+  #         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+
+  #     - name: Notify Discord on Failure
+  #       if: failure() 
+  #       uses: Ilshidur/action-discord@master
+  #       with:
+  #         args: |
+  #           a build failed.
+  #           Link: ${{ secrets.APP_URL }}
+  #           Commit: ${{ github.event.head_commit.url }}
+  #           Author: ${{ github.actor }}
+  #       env:
+  #         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
