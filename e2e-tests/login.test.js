@@ -1,11 +1,9 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
 
 describe('Blog app', () => {
-  beforeEach(async ({ page }) => {
-    await page.goto('')
-  })
 
   test('Login form is displayed correctly with header, textbox and submit button', async ({ page }) => {
+    await page.goto('http://localhost:3003/')
     // check header
     const loginHeader = page.locator('text=Log in to application')
     await expect(loginHeader).toBeVisible()
