@@ -1,4 +1,4 @@
-const { test, expect, beforeEach, describe } = require('@playwright/test')
+const { test, expect, describe } = require('@playwright/test')
 
 describe('Blog app', () => {
 
