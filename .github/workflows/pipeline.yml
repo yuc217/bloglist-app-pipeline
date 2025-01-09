@@ -25,10 +25,10 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: run Playwright tests
-        # env:
-        #   MONGODB_URI: ${{ secrets.MONGODB_URI }}
-        #   TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
-        #   PORT: 3003
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
+          PORT: ${{ secrets.PORT }}
         run: npm run test:e2e
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
