@@ -28,6 +28,7 @@ jobs:
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
+          PORT: 3003
         run: npm run test:e2e
 
   #     - uses: superfly/flyctl-actions/setup-flyctl@master
